@@ -8,6 +8,7 @@ namespace Repaso3D
 {
     class Propiedad
     {
+        //se agregan las caracteristicas que pidan en el problema
         public string numeroCasa { get; set; }
         public string dpi { get; set; }
         public decimal cuota { get; set; }

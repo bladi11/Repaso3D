@@ -21,18 +21,40 @@ namespace Repaso3D
             InitializeComponent();
         }
         
-        private void CargarPropiedades()
+        private void CargarPropiedades()  
         {
-            FileStream stream = new FileStream("Propiedades.txt", OpenOrCreate);
+            FileStream stream = new FileStream("Propiedades.txt", FileMode.Open, FileAccess.Read);
             StreamReader reader = new StreamReader(stream);
 
             while (reader.Peek()>-1)
             {
-                Propietario propiedad = new Propietario();
-                propiedad
-            }
-        }
+                //carga la lista de propiedades en el orden que se agregaron a la clase y como esta en el txt
+                Propiedad propiedad = new Propiedad();
+                propiedad.numeroCasa = reader.ReadLine();
+                propiedad.dpi = reader.ReadLine();
+                propiedad.cuota = Convert.ToDecimal(reader.ReadLine());
 
+                propiedades.Add(propiedad);
+            }
+            reader.Close();
+        }
+        private void CargarPropietarios()
+        {
+            FileStream stream = new FileStream("Propietarios.txt", FileMode.Open, FileAccess.Read);
+            StreamReader reader = new StreamReader(stream);
+
+            while (reader.Peek() > -1)
+            {
+                //carga la lista de propietarios en el orden que se agregaron a la clase y como esta en el txt
+                Propietario propietario = new Propietario();
+                propietario.dpi = reader.ReadLine();
+                propietario.nombre = reader.ReadLine();
+                propietario.apellido = reader.ReadLine();
+
+                propietarios.Add(propietario);
+            }
+            reader.Close();
+        }
         private void CargarGridView()
         {
             dataGridView1.DataSource = null;
@@ -43,16 +65,18 @@ namespace Repaso3D
         private void buttonResumen_Click(object sender, EventArgs e)
         {
             CargarPropiedades();
+            CargarPropietarios();
 
-            for (int i=0; i< propiedades.Count; i++)
+            for (int i=0; i< propiedades.Count; i++)                          //mira cuantas propiedades hay
             {
                 for (int j = 0; j< propietarios.Count; j++)
                 {
-                    if (propiedades[i].dpi == propietarios[j].dpi)
-                    {
-                        Resumen dataResumen = new Resumen();
+                    if (propiedades[i].dpi == propietarios[j].dpi)           //busca el dpi de la lista propiedades y lista de propietarios 
+                    {                                                        //si son iguales con nombreresumen saca el nombre apellido  
+                        Resumen dataResumen = new Resumen();                 // numerocasa y cuota
                         dataResumen.nombre = propietarios[j].nombre;
                         dataResumen.apellido = propietarios[j].apellido;
+                        //datoresumen.apellido = de donde lo va a obtener
                         dataResumen.numeroCasa = propiedades[i].numeroCasa;
                         dataResumen.cuota = propiedades[i].cuota;
 
@@ -80,7 +104,7 @@ namespace Repaso3D
 
             int cuantos = resumen.Count();
             labelMayor.Text = resumen[cuantos-1].cuota.ToString();
-            labelNombre.Text = resumen[cuantos -1].nombre + ", " + 
+            labelNombre.Text = resumen[cuantos - 1].nombre + ", " + resumen[cuantos - 1].apellido;
         }
     }
 }
